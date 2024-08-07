@@ -1,0 +1,21 @@
+---
+- name: Setup Ansible components
+  hosts: aapcontroller
+  gather_facts: false
+  vars:
+    controller_validate_certs: "{{ lookup('ansible.builtin.env', 'CONTROLLER_VALIDATE_CERTS') | ansible.builtin.bool }}"
+
+  tasks:
+    - name: Update projects and inventory
+      ansible.builtin.include_role:
+        name: "redhat_cop.controller_configuration.{{ item }}"
+      loop:
+        - project_update
+        - inventory_source_update
+
+    - name: Setup Components
+      ansible.builtin.include_role:
+        name: "redhat_cop.controller_configuration.{{ item }}"
+      loop: "{{ controller_components }}"
+      when:
+        - controller_components | d("") | length > 0

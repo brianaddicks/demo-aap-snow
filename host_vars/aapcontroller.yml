@@ -1,0 +1,179 @@
+---
+controller_components:
+  - credential_types
+  - credentials
+  - execution_environments
+  - projects
+  - inventories
+  - inventory_sources
+  - job_templates
+
+aap_cred: 'AAP API Cred'
+ssh_cred: 'SSH Cred'
+vcenter_cred: 'vCenter Cred'
+quay_cred: 'Quay'
+# ssl_cert_cred: 'SSL Wildcard'
+# dynatrace_cred: 'Dynatrace API'
+snow_cred: 'ServiceNow Cred'
+rh_org_cred: 'Red Hat Organization ID'
+
+vcenter_ee: vCenter EE
+rhel_ee: RHEL EE
+aap_ee: AAP EE
+# dynatrace_ee: Dynatrace EE
+snow_ee: ServiceNow EE
+
+this_demo_inventory: SNOW Demo Inventory
+this_demo_project: SNOW Demo Project
+
+controller_credentials:
+  - name: '{{ aap_cred }}'
+    description: '{{ aap_cred }}'
+    organization: Default
+    credential_type: Red Hat Ansible Automation Platform
+    inputs:
+      host: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+      password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+      username: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+      verify_ssl: "{{ lookup('ansible.builtin.env', 'CONTROLLER_VALIDATE_CERTS') | ansible.builtin.bool }}"
+  # - name: "{{ ssh_cred }}"
+  #   description: "{{ ssh_cred }}"
+  #   organization: Default
+  #   credential_type: Machine
+  #   inputs:
+  #     username: "{{ lookup('ansible.builtin.env', 'ANSIBLE_SSH_USERNAME') }}"
+  #     ssh_key_data: "{{ lookup('ansible.builtin.env', 'ANSIBLE_SSH_PRIVATE_KEY') }}"
+  #     become_method: "sudo"
+  - name: '{{ vcenter_cred }}'
+    description: '{{ vcenter_cred }}'
+    organization: Default
+    credential_type: VMware vCenter
+    inputs:
+      host: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
+      password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
+      username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
+  - name: '{{ quay_cred }}'
+    description: '{{ quay_cred }}'
+    organization: Default
+    credential_type: Container Registry
+    inputs:
+      host: "{{ lookup('ansible.builtin.env', 'QUAY_HOST') }}"
+      password: "{{ lookup('ansible.builtin.env', 'QUAY_PASSWORD') }}"
+      username: "{{ lookup('ansible.builtin.env', 'QUAY_USERNAME') }}"
+      verify_ssl: true
+  - name: '{{ snow_cred }}'
+    description: '{{ snow_cred }}'
+    organization: Default
+    credential_type: 'ServiceNow'
+    inputs:
+      sn_host: "{{ lookup('ansible.builtin.env', 'SN_HOST') }}"
+      sn_username: "{{ lookup('ansible.builtin.env', 'SN_USERNAME') }}"
+      sn_password: "{{ lookup('ansible.builtin.env', 'SN_PASSWORD') }}"
+  - name: '{{ rh_org_cred }}'
+    description: '{{ rh_org_cred }}'
+    organization: Default
+    credential_type: '{{ rh_org_cred }}'
+    inputs:
+      rhc_organization: "{{ lookup('ansible.builtin.env', 'RHC_ORGANIZATION') }}"
+
+controller_projects:
+  - name: '{{ this_demo_project }}'
+    organization: Default
+    scm_branch: main
+    scm_clean: 'no'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'no'
+    scm_url: https://github.com/brianaddicks/demo-aap-snow
+    update_project: true
+
+controller_execution_environments:
+  - name: '{{ vcenter_ee }}'
+    image: quay.io/rh_ee_baddicks/vsphere-ee
+    credential: '{{ quay_cred }}'
+    pull: always
+  - name: '{{ rhel_ee }}'
+    image: quay.io/rh_ee_baddicks/rhel-90-ee
+    credential: '{{ quay_cred }}'
+    pull: always
+  - name: '{{ aap_ee }}'
+    image: quay.io/rh_ee_baddicks/ansible-controller-ee
+    credential: '{{ quay_cred }}'
+    pull: always
+  - name: '{{ snow_ee }}'
+    image: quay.io/rh_ee_baddicks/snow-ee
+    credential: '{{ quay_cred }}'
+    pull: always
+
+controller_inventories:
+  - name: '{{ this_demo_inventory }}'
+    description: '{{ this_demo_inventory }}'
+    organization: Default
+
+controller_inventory_sources:
+  - name: '{{ this_demo_inventory }} Repo'
+    source: scm
+    inventory: '{{ this_demo_inventory }}'
+    source_path: inventory.yml
+    overwrite: true
+    update_on_launch: false
+    update_cache_timeout: 0
+    source_project: '{{ this_demo_project }}'
+
+controller_templates:
+  - name: 'Linux - Webserver Setup'
+    job_type: run
+    inventory: '{{ this_demo_inventory }}'
+    project: '{{ this_demo_project }}'
+    playbook: 'playbooks/linux_update_packages.yml'
+    execution_environment: '{{ rhel_ee }}'
+    credentials:
+      - '{{ ssh_cred }}'
+
+controller_credential_types:
+  - name: ServiceNow
+    description: ServiceNow
+    inputs:
+      fields:
+        - type: string
+          id: sn_host
+          label: ServiceNow URL
+          multiline: false
+        - type: string
+          id: sn_username
+          label: ServiceNow Username
+          multiline: false
+        - type: string
+          id: sn_password
+          label: ServiceNow Password
+          secret: true
+          multiline: false
+      required:
+        - sn_host
+        - sn_username
+        - sn_password
+    injectors:
+      extra_vars:
+        sn_instance: !unsafe '{{ sn_host }}'
+        sn_username: !unsafe '{{ sn_username }}'
+        sn_password: !unsafe '{{ sn_password }}'
+      env:
+        SN_HOST: !unsafe '{{ sn_host }}'
+        SN_USERNAME: !unsafe '{{ sn_username }}'
+        SN_PASSWORD: !unsafe '{{ sn_password }}'
+  - name: '{{ rh_org_cred }}'
+    description: '{{ rh_org_cred }}'
+    inputs:
+      fields:
+        - type: string
+          id: rhc_organization
+          label: Red Hat Orginization ID
+          secret: true
+          multiline: false
+      required:
+        - rhc_organization
+    injectors:
+      extra_vars:
+        rhc_organization: !unsafe '{{ rhc_organization }}'
+      env:
+        RHC_ORGANIZATION: !unsafe '{{ rhc_organization }}'

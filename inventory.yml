@@ -1,7 +1,10 @@
----
 all:
   children:
-    hosts:
-      localhost:
-        vars:
-          ansible_connection: local
+    webservers:
+      hosts:
+        eda-web1:
+    apiendpoints:
+      hosts:
+        aapcontroller:
+      vars:
+        ansible_connection: local

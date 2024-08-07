@@ -1,0 +1,10 @@
+---
+- name: Update all packages
+  hosts: webservers
+
+  tasks:
+    - name: Update all installed packages
+      ansible.builtin.package:
+        name: '*'
+        state: latest
+      become: true
