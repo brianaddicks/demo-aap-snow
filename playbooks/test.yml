@@ -5,5 +5,5 @@
 
   tasks:
     - name: Test output
-      debug:
+      ansible.builtin.debug:
         msg: test message
