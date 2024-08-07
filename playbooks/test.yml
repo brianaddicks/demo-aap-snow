@@ -4,5 +4,6 @@
   gather_facts: false
 
   tasks:
-    - debug:
+    - name: Test output
+      debug:
         msg: test message
