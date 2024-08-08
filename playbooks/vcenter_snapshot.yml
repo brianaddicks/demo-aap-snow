@@ -15,7 +15,7 @@
       community.vmware.vmware_guest_snapshot:
         <<: *vcenter_conn
         datacenter: "{{ vcenter_datacenter }}"
-        folder: "/{{ vcenter_datacenter }}/vm/{{ vcenter_vm_folder }}"
+        folder: "/{{ vcenter_datacenter }}/vm/{{ vcenter_vm_folder | default(omit) }}"
         name: "{{ vm_name }}"
         state: present
         snapshot_name: pre-patching
