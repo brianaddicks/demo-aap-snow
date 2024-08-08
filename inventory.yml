@@ -6,5 +6,6 @@ all:
     apiendpoints:
       hosts:
         aapcontroller:
+        snow:
       vars:
         ansible_connection: local

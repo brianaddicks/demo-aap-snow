@@ -121,7 +121,7 @@ controller_inventory_sources:
     source_project: '{{ this_demo_project }}'
 
 controller_templates:
-  - name: 'Linux - Webserver Setup'
+  - name: 'Linux - Patching'
     job_type: run
     inventory: '{{ this_demo_inventory }}'
     project: '{{ this_demo_project }}'
@@ -129,6 +129,14 @@ controller_templates:
     execution_environment: '{{ rhel_ee }}'
     credentials:
       - '{{ ssh_cred }}'
+  - name: 'SNOW - Create CR'
+    job_type: run
+    inventory: '{{ this_demo_inventory }}'
+    project: '{{ this_demo_project }}'
+    playbook: 'playbooks/snow_change_request_wait.yml'
+    execution_environment: '{{ snow_ee }}'
+    credentials:
+      - '{{ snow_cred }}'
 
 controller_credential_types:
   - name: ServiceNow
