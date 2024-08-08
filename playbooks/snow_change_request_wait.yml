@@ -57,7 +57,7 @@
         - name: Set stat with cr number
           ansible.builtin.set_stats:
             data:
-              snow_cr_number: snow_cr_request_status.records[0].number
+              snow_cr_number: "{{ snow_cr_request_status.records[0].number }}"
 
         # - name: Update to implement the change request in ServiceNow
         #   servicenow.itsm.change_request:
