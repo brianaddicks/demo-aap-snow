@@ -9,6 +9,11 @@
         name: '*'
         state: latest
       become: true
+      register: package_results
 
-    - debug:
-        var: check_mode
+    - ansible.builtin.debug:
+        msg:
+          - "{{ check_mode }}"
+          - "{{ package_results.results }}"
+
+
