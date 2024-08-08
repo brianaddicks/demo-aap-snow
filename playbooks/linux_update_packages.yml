@@ -14,5 +14,6 @@
     - ansible.builtin.set_stats:
         data:
           stat_package_results: "{{ package_results.results | to_nice_yaml }}"
+          snow_ticket_number: "{{ snow_ticket_number | default('111111') }}"
 
 
