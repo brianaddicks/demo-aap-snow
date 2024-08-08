@@ -24,10 +24,19 @@
       register: vcenter_snapshot_info
 
     - name: Set stats for SNOW Update
+      when: snow_snapshot is defined and
+            snow_snapshot
       ansible.builtin.set_stats:
         data:
           snow_request_state: requested
           snow_work_notes: >
             vCenter snapshot "{{ snow_ticket_number }}" created at "{{ vcenter_snapshot_info.snapshot_results.current_snapshot.creation_time }}".
-
+    - name: Set stats for SNOW Update
+      when: snow_snapshot is not defined or
+            not snow_snapshot
+      ansible.builtin.set_stats:
+        data:
+          snow_request_state: requested
+          snow_work_notes: >
+            No snapshot requested.
 
