@@ -11,26 +11,14 @@
       register: requestresult
       when: snow_ticket_number != ''
 
-    - name: Update a catalog work notes with snapshot info
-      servicenow.itsm.api:
-        action: patch
-        resource: sc_request
-        sys_id: "{{ requestresult.record[0].sys_id }}"
-        data:
-          work_notes: "{{ snow_snapshot_update_info }}"
-      when:
-        - snow_ticket_number != ''
-        - requestresult.record[0].sys_id is defined
-        - snow_snapshot_update_info is defined
-
     - name: Update a catalog work notes and state in ServiceNow
       servicenow.itsm.api:
         action: patch
         resource: sc_request
         sys_id: "{{ requestresult.record[0].sys_id }}"
         data:
-          request_state: "{{ request_state | default(omit) }}"
-          work_notes: "{{ stat_package_results }}"
+          request_state: "{{ snow_request_state | default(omit) }}"
+          work_notes: "{{ snow_work_notes }}"
       when:
         - snow_ticket_number != ''
         - requestresult.record[0].sys_id is defined

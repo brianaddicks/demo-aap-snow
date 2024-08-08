@@ -26,7 +26,8 @@
     - name: Set stats for SNOW Update
       ansible.builtin.set_stats:
         data:
-          snow_snapshot_update_info: >
+          snow_request_state: requested
+          snow_work_notes: >
             vCenter snapshot "{{ snow_ticket_number }}" created at "{{ vcenter_snapshot_info.snapshot_results.current_snapshot.creation_time }}".
 
 
