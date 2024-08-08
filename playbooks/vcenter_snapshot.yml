@@ -28,7 +28,7 @@
             snow_snapshot
       ansible.builtin.set_stats:
         data:
-          snow_request_state: requested
+          snow_request_state: approved
           snow_work_notes: >
             vCenter snapshot "{{ snow_ticket_number }}" created at "{{ vcenter_snapshot_info.snapshot_results.current_snapshot.creation_time }}".
     - name: Set stats for SNOW Update
@@ -36,7 +36,7 @@
             not snow_snapshot
       ansible.builtin.set_stats:
         data:
-          snow_request_state: requested
+          snow_request_state: approved
           snow_work_notes: >
             No snapshot requested.
 
