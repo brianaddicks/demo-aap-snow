@@ -13,7 +13,7 @@
             description: >
               Change requested by {{ snow_ticket_number }}
 
-              {{ stat_package_results | default(snow_cr_description) }}
+              {{ snow_work_notes | default(snow_cr_description) }}
             priority: high
             risk: moderate
             impact: low
