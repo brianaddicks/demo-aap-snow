@@ -12,6 +12,7 @@
             short_description: "{{ snow_cr_short_description }}"
             description: >
               Change requested by {{ snow_ticket_number }}
+
               {{ stat_package_results | default(snow_cr_description) }}
             priority: high
             risk: moderate
