@@ -1,6 +1,7 @@
 ---
 - name: Update all packages
   hosts: webservers
+  gather_facts: false
 
   tasks:
     - name: Update all installed packages
@@ -8,3 +9,6 @@
         name: '*'
         state: latest
       become: true
+
+    - debug:
+        var: check_mode
