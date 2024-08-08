@@ -7,19 +7,19 @@
         hostname: "{{ lookup('ansible.builtin.env', 'VMWARE_HOST') }}"
         username: "{{ lookup('ansible.builtin.env', 'VMWARE_USER') }}"
         password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
-        datacenter: '{{ vcenter_datacenter }}'
-        name: '{{ vm_name }}'
 
   tasks:
     - name: Create a snapshot
+      when: snow_snapshot
       community.vmware.vmware_guest_snapshot:
         <<: *vcenter_conn
         datacenter: "{{ vcenter_datacenter }}"
         folder: "/{{ vcenter_datacenter }}/vm/{{ vcenter_vm_folder | default(omit) }}"
-        name: "{{ vm_name }}"
+        name: "{{ snow_hostname }}"
         state: present
         snapshot_name: pre-patching
         description: pre-patching
       delegate_to: localhost
+      register: vcenter_snapshot_info
 
 
