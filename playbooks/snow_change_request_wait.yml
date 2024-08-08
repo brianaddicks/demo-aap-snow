@@ -45,7 +45,7 @@
         - name: Wait for Change Request approval
           servicenow.itsm.change_request_info:
             number: "{{ snow_cr_request.record.number }}"
-          until: change_request_status.records[0].state == "scheduled"
+          until: change_request_status.records[0].state == "authorize"
           retries: 50
           delay: 10
           register: change_request_status
