@@ -13,7 +13,7 @@
 
     - ansible.builtin.debug:
         msg:
-          - "{{ check_mode }}"
+          - "{{ ansible_check_mode }}"
           - "{{ package_results.results }}"
 
 
