@@ -13,6 +13,6 @@
 
     - ansible.builtin.set_stats:
         data:
-          stat_package_results: "{{ package_results.results }}"
+          stat_package_results: "{{ package_results.results | to_nice_json }}"
 
 
