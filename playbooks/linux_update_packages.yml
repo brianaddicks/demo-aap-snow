@@ -14,6 +14,7 @@
     - ansible.builtin.set_stats:
         data:
           snow_work_notes: "{{ package_results.results | to_nice_yaml }}"
+          package_results_count: "{{ package_results.results | length }}"
           snow_request_state: closed_complete
           snow_ticket_number: "{{ snow_ticket_number | default('111111') }}"
           snow_hostname: "{{ snow_hostname | default('eda-web1') }}"
