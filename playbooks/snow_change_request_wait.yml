@@ -16,8 +16,8 @@
             impact: low
             assignment_group: "{{ snow_cr_assignment_group }}"
             state: assess
-          register: request
-          until: request.changed is defined
+          register: snow_cr_request
+          until: snow_cr_request.changed is defined
           retries: 5
           delay: 5
           delegate_to: localhost
@@ -42,18 +42,18 @@
         #     to: "{{ to_email }}"
         #   delegate_to: localhost
 
-        # - name: Wait for Change Request approval
-        #   servicenow.itsm.change_request_info:
-        #     number: "{{ request.record.number }}"
-        #   until: change_request_status.records[0].state == "scheduled"
-        #   retries: 50
-        #   delay: 10
-        #   register: change_request_status
-        #   delegate_to: localhost
+        - name: Wait for Change Request approval
+          servicenow.itsm.change_request_info:
+            number: "{{ snow_cr_request.record.number }}"
+          until: change_request_status.records[0].state == "scheduled"
+          retries: 50
+          delay: 10
+          register: change_request_status
+          delegate_to: localhost
 
-        # - name: Update to implement the change request in ServiceNow
-        #   servicenow.itsm.change_request:
-        #     state: implement
-        #     number: "{{ request.record.number }}"
-        #     assignment_group: CAB Approval
-        #   delegate_to: localhost
+        - name: Update to implement the change request in ServiceNow
+          servicenow.itsm.change_request:
+            state: implement
+            number: "{{ snow_cr_request.record.number }}"
+            assignment_group: "{{ snow_cr_assignment_group }}"
+          delegate_to: localhost
