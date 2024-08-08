@@ -11,9 +11,8 @@
       become: true
       register: package_results
 
-    - ansible.builtin.debug:
-        msg:
-          - "{{ ansible_check_mode }}"
-          - "{{ package_results.results }}"
+    - ansible.builtin.set_stats:
+        data:
+          package_results: "{{ package_results.results }}"
 
 

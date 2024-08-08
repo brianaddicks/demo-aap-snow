@@ -10,7 +10,7 @@
           servicenow.itsm.change_request:
             type: normal
             short_description: "{{ snow_cr_short_description }}"
-            description: "{{ snow_cr_description }}"
+            description: "{{ package_results.results }}"
             priority: high
             risk: moderate
             impact: low
