@@ -14,7 +14,7 @@
             priority: high
             risk: moderate
             impact: low
-            assignment_group: CAB Approval
+            assignment_group: "{{ snow_cr_assignment_group }}"
             state: assess
           register: request
           until: request.changed is defined
