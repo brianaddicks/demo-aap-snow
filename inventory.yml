@@ -6,6 +6,7 @@ all:
     apiendpoints:
       hosts:
         aapcontroller:
+        vcenter:
         snow:
           snow_cr_short_description: BA AAP CR
           snow_cr_description: Sample change description
