@@ -1,0 +1,17 @@
+---
+- name: Create AAP Schedule
+  hosts: aapcontroller
+  gather_facts: false
+  vars:
+    job_template_name: WF - Patching Approved
+
+  tasks:
+    - name: Build the Schedule for {{ job_template_name }} job at {{ planned_date_time }} GMT
+      ansible.controller.schedule:
+        name: Run {{ job_template_name }} job at {{ planned_date_time }} GMT
+        state: present
+        unified_job_template: "{{ job_template_name }}"
+        rrule: "{{ query('ansible.controller.schedule_rrule', 'none', start_date=planned_date_time, timezone='GMT') }}"
+        extra_data:
+          change_request_number: "{{ snow_cr_number }}"
+      when: ((now(utc=true, fmt="%Y-%m-%d %H:%M:%S") | to_datetime) - (planned_date_time | to_datetime)).total_seconds() | int < 0

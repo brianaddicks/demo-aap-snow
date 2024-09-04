@@ -153,6 +153,14 @@ controller_templates:
     execution_environment: '{{ vcenter_ee }}'
     credentials:
       - '{{ vcenter_cred }}'
+  - name: 'AAP - Create Schedule'
+    job_type: run
+    inventory: '{{ this_demo_inventory }}'
+    project: '{{ this_demo_project }}'
+    playbook: 'playbooks/aap_create_schedule.yml'
+    execution_environment: '{{ aap_ee }}'
+    credentials:
+      - '{{ aap_cred }}'
 
 controller_credential_types:
   - name: ServiceNow
