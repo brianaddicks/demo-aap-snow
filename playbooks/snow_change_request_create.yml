@@ -1,0 +1,26 @@
+---
+- name: Setup Ansible components
+  hosts: snow
+  gather_facts: false
+
+  tasks:
+    - name: Block to create CR
+      block:
+        - name: Create ServiceNow Change Request
+          servicenow.itsm.change_request:
+            type: normal
+            short_description: "{{ snow_cr_short_description }}"
+            description: >
+              Change requested by {{ snow_ticket_number }}
+
+              {{ snow_work_notes | default(snow_cr_description) }}
+            priority: high
+            risk: moderate
+            impact: low
+            assignment_group: "{{ snow_cr_assignment_group }}"
+            state: assess
+          register: snow_cr_request
+          until: snow_cr_request.changed is defined
+          retries: 5
+          delay: 5
+          delegate_to: localhost

@@ -133,7 +133,7 @@ controller_templates:
     job_type: run
     inventory: '{{ this_demo_inventory }}'
     project: '{{ this_demo_project }}'
-    playbook: 'playbooks/snow_change_request_wait.yml'
+    playbook: 'playbooks/snow_change_request_create.yml'
     execution_environment: '{{ snow_ee }}'
     credentials:
       - '{{ snow_cred }}'
