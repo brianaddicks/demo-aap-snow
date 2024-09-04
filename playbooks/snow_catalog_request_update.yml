@@ -4,28 +4,27 @@
   gather_facts: false
 
   tasks:
-  - name: Update to implement the change request in ServiceNow
-    servicenow.itsm.change_request:
-      state: implement
-      number: "{{ snow_cr_request.record.number }}"
-      assignment_group: "{{ snow_cr_assignment_group }}"
-    delegate_to: localhost
+  # - name: Update to implement the change request in ServiceNow
+      #   servicenow.itsm.change_request:
+      #     state: implement
+      #     number: "{{ snow_cr_request.record.number }}"
+      #     assignment_group: "{{ snow_cr_assignment_group }}"
+      #   delegate_to: localhost
+    - name: Retrieve catalog request sysid
+      servicenow.itsm.api_info:
+        resource: sc_request
+        sysparm_query: numberSTARTSWITH{{ snow_ticket_number }}
+      register: requestresult
+      when: snow_ticket_number != ''
 
-    # - name: Retrieve catalog request sysid
-    #   servicenow.itsm.api_info:
-    #     resource: sc_request
-    #     sysparm_query: numberSTARTSWITH{{ snow_ticket_number }}
-    #   register: requestresult
-    #   when: snow_ticket_number != ''
-
-    # - name: Update a catalog work notes and state in ServiceNow
-    #   servicenow.itsm.api:
-    #     action: patch
-    #     resource: sc_request
-    #     sys_id: "{{ requestresult.record[0].sys_id }}"
-    #     data:
-    #       request_state: "{{ snow_request_state | default(omit) }}"
-    #       work_notes: "{{ snow_work_notes }}"
-    #   when:
-    #     - snow_ticket_number != ''
-    #     - requestresult.record[0].sys_id is defined
+    - name: Update a catalog work notes and state in ServiceNow
+      servicenow.itsm.api:
+        action: patch
+        resource: sc_request
+        sys_id: "{{ requestresult.record[0].sys_id }}"
+        data:
+          request_state: "{{ snow_request_state | default(omit) }}"
+          work_notes: "{{ snow_work_notes }}"
+      when:
+        - snow_ticket_number != ''
+        - requestresult.record[0].sys_id is defined

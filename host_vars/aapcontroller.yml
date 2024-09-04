@@ -145,6 +145,14 @@ controller_templates:
     execution_environment: '{{ snow_ee }}'
     credentials:
       - '{{ snow_cred }}'
+  - name: 'SNOW - Update Change Request'
+    job_type: run
+    inventory: '{{ this_demo_inventory }}'
+    project: '{{ this_demo_project }}'
+    playbook: 'playbooks/snow_change_request_update.yml'
+    execution_environment: '{{ snow_ee }}'
+    credentials:
+      - '{{ snow_cred }}'
   - name: 'vCenter - Snapshot VM'
     job_type: run
     inventory: '{{ this_demo_inventory }}'
