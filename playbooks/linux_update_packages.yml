@@ -11,6 +11,11 @@
       become: true
       register: package_results
 
+    - name: Create fact for implemention plan
+      ansible.builtin.set_fact:
+        snow_impl:
+          "{{ inventory_hostname }}": "{{ package_results.results }}"
+
     - ansible.builtin.set_stats:
         data:
           snow_work_notes: "{{ package_results.results | to_nice_yaml }}"
@@ -19,7 +24,4 @@
           snow_ticket_number: "{{ snow_ticket_number | default('111111') }}"
           snow_hostname: "{{ snow_hostname | default('eda-web1') }}"
           snow_snapshot: "{{ snow_snapshot | default(false) }}"
-
-
-
-
+          snow_implementation_plan: "{{ snow_impl | to_nice_yaml }}"

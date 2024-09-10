@@ -3,6 +3,9 @@
   hosts: localhost
   vars:
     snow_planned_datetime: "2024-09-11 10:02:30"  # Original datetime
+    snow_configuration_item:
+      - eda-web1
+      - eda-web2
   tasks:
     - ansible.builtin.set_fact:
         utc_year: "{{ (snow_planned_datetime | to_datetime).year }}"
@@ -18,3 +21,11 @@
 
     - debug:
         var: utc_planned_datetime
+
+    - ansible.builtin.set_fact:
+        host: "{{ item }}"
+      loop: "{{ snow_configuration_item }}"
+      register: full_package_results
+
+    - debug:
+        var: full_package_results.results
