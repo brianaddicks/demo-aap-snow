@@ -1,4 +1,4 @@
 {{ inventory_hostname }}:
-{% for package in package_results.results -%}
+  {% for package in package_results.results -%}
   - {{ package }}
-{% endfor %}
+  {% endfor %}
