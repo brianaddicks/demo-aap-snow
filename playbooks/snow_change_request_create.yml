@@ -29,7 +29,7 @@
             type: normal
             short_description: "{{ snow_cr_short_description }}"
             description: >
-              Patch the following systems
+              Patch the following systems:
 
               {{ snow_cr_description | default(snow_cr_description) }}
             priority: high
