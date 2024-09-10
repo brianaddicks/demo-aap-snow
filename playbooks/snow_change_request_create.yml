@@ -12,7 +12,7 @@
             utc_month: '{{ "%02d" | format((snow_planned_datetime | to_datetime).month) }}'
             utc_day: '{{ "%02d" | format((snow_planned_datetime | to_datetime).day) }}'
             utc_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
-            utc_end_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
+            utc_end_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +5) }}'
             utc_minute: '{{ "%02d" | format((snow_planned_datetime | to_datetime).minute | int) }}'
 
         - name: Convert planned start/end date to UTC
