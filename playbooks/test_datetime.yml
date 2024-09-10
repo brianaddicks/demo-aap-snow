@@ -1,0 +1,20 @@
+---
+- name: Add 4 hours to the planned datetime
+  hosts: localhost
+  vars:
+    snow_planned_datetime: "2024-09-11 10:02:30"  # Original datetime
+  tasks:
+    - ansible.builtin.set_fact:
+        utc_year: "{{ (snow_planned_datetime | to_datetime).year }}"
+        utc_month: '{{ "%02d" | format((snow_planned_datetime | to_datetime).month) }}'
+        utc_day: '{{ "%02d" | format((snow_planned_datetime | to_datetime).day) }}'
+        utc_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
+        utc_minute: '{{ "%02d" | format((snow_planned_datetime | to_datetime).minute | int) }}'
+
+    - ansible.builtin.set_fact:
+        utc_planned_datetime: >-
+          {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
+          {{ utc_hour }}:{{ utc_minute }}:00
+
+    - debug:
+        var: utc_planned_datetime

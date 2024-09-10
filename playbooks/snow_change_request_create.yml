@@ -6,6 +6,24 @@
   tasks:
     - name: Block to create CR
       block:
+        - name: Get planned date info from SNOW
+          ansible.builtin.set_fact:
+            utc_year: "{{ (snow_planned_datetime | to_datetime).year }}"
+            utc_month: '{{ "%02d" | format((snow_planned_datetime | to_datetime).month) }}'
+            utc_day: '{{ "%02d" | format((snow_planned_datetime | to_datetime).day) }}'
+            utc_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
+            utc_end_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
+            utc_minute: '{{ "%02d" | format((snow_planned_datetime | to_datetime).minute | int) }}'
+
+        - name: Convert planned start/end date to UTC
+          ansible.builtin.set_fact:
+            utc_planned_datetime: >-
+              {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
+              {{ utc_hour }}:{{ utc_minute }}:00
+            utc_planned_end_datetime: >-
+              {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
+              {{ utc_end_hour }}:{{ utc_minute }}:00
+
         - name: Create ServiceNow Change Request
           servicenow.itsm.change_request:
             type: normal
@@ -20,7 +38,8 @@
             assignment_group: "{{ snow_cr_assignment_group }}"
             state: assess
             other:
-              start_date: "{{ snow_planned_datetime }}"
+              start_date: "{{ utc_planned_datetime }}"
+              end_date: "{{ utc_planned_end_datetime }}"
           register: snow_cr_request
           until: snow_cr_request.changed is defined
           retries: 5
