@@ -19,6 +19,8 @@
             impact: low
             assignment_group: "{{ snow_cr_assignment_group }}"
             state: assess
+            other:
+              planned_start_time: "{{ snow_planned_datetime }}"
           register: snow_cr_request
           until: snow_cr_request.changed is defined
           retries: 5
