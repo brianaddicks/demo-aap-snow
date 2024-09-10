@@ -1,3 +1,4 @@
----
-{{ inventory_hostname }}
-  {{ package_results.results | to_nice_yaml }}
+{{ inventory_hostname }}:
+{% for package in package_results.results -%}
+  - {{ package }}
+{% endfor %}
