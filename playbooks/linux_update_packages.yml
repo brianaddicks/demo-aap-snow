@@ -1,6 +1,6 @@
 ---
 - name: Update all packages
-  hosts: webservers
+  hosts: "{{ snow_configuration_item | default('webservers') }}"
   gather_facts: false
 
   tasks:
