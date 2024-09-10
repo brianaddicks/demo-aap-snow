@@ -31,7 +31,7 @@
             description: >
               Patch the following systems:
 
-              {{ (snow_configuration_item | split(',') | to_nice_yaml) | default(snow_cr_description) }}
+              {{ (snow_configuration_item | split(', ') | to_nice_yaml) | default(snow_cr_description) }}
             priority: high
             risk: moderate
             impact: low
