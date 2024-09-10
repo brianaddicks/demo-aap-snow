@@ -29,9 +29,9 @@
             type: normal
             short_description: "{{ snow_cr_short_description }}"
             description: >
-              Change requested by {{ snow_ticket_number }}
+              Patch the following systems
 
-              {{ snow_work_notes | default(snow_cr_description) }}
+              {{ snow_cr_description | default(snow_cr_description) }}
             priority: high
             risk: moderate
             impact: low
