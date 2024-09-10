@@ -3,6 +3,7 @@ all:
     webservers:
       hosts:
         eda-web1:
+        eda-web2:
     apiendpoints:
       hosts:
         aapcontroller:
