@@ -1,3 +1,3 @@
 ---
 {{ inventory_hostname }}
-  {{ package_results.results }}
+  {{ package_results.results | to_nice_yaml }}
