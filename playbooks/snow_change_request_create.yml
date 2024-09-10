@@ -40,6 +40,7 @@
             other:
               start_date: "{{ utc_planned_datetime }}"
               end_date: "{{ utc_planned_end_datetime }}"
+              u_ritm: "{{ snow_ritm }}"
           register: snow_cr_request
           until: snow_cr_request.changed is defined
           retries: 5
