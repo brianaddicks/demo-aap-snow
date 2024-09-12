@@ -16,4 +16,4 @@
         - name: Set stats for subsequent Job Templates
           ansible.builtin.set_stats:
             data:
-              snow_implementation_plan: "{{ snow_cr_request_info.records[0] | ansible.builtin.from_yaml }}"
+              snow_implementation_plan: "{{ snow_cr_request_info.records[0].implementation_plan | ansible.builtin.from_yaml }}"
