@@ -1,11 +1,11 @@
 ---
 - name: Add 4 hours to the planned datetime
   hosts: localhost
-  vars:
-    snow_planned_datetime: "2024-09-11 10:02:30"  # Original datetime
-    snow_configuration_item:
-      - eda-web1
-      - eda-web2
+  # vars:
+  #   snow_planned_datetime: "2024-09-11 10:02:30"  # Original datetime
+  #   snow_configuration_item:
+  #     - eda-web1
+  #     - eda-web2
   tasks:
     - ansible.builtin.set_fact:
         utc_year: "{{ (snow_planned_datetime | to_datetime).year }}"
