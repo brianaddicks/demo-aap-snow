@@ -22,10 +22,3 @@
     - debug:
         var: utc_planned_datetime
 
-    - ansible.builtin.set_fact:
-        host: "{{ item }}"
-      loop: "{{ snow_configuration_item }}"
-      register: full_package_results
-
-    - debug:
-        var: full_package_results.results
