@@ -8,7 +8,7 @@
       block:
 
         - name: Retrieve SNOW Change Request info
-          servicenow.itsm.change_reques_info:
+          servicenow.itsm.change_request_info:
             number: "{{ snow_cr_number }}"
           register: snow_cr_request_info
           delegate_to: localhost
