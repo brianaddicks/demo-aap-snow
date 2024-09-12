@@ -11,7 +11,8 @@
       become: true
       register: package_results
 
-    - ansible.builtin.set_stats:
+    - name: Set stats for subsequent Job Templates
+      ansible.builtin.set_stats:
         data:
           package_results_count: "{{ package_results.results | length }}"
           snow_request_state: closed_complete
