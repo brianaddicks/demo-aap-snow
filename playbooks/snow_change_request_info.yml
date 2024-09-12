@@ -1,0 +1,14 @@
+---
+- name: Get info from SNOW CR
+  hosts: snow
+  gather_facts: false
+
+  tasks:
+    - name: Block to create CR
+      block:
+
+        - name: Retrieve SNOW Change Request info
+          servicenow.itsm.change_reques_info:
+            number: "{{ snow_cr_number }}"
+          register: snow_cr_request_info
+          delegate_to: localhost
