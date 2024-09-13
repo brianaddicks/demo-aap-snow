@@ -28,4 +28,5 @@
 
     - debug:
       loop: "{{ snow_configuration_item | split(',') }}"
-        msg: "{{ hostvars[item].sys_id }}"
+        msg: "{{ item }}"
+        # msg: "{{ hostvars[item].sys_id }}"
