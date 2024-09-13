@@ -1,6 +1,7 @@
 {% filter indent(width=2) %}
 {{ inventory_hostname }}:
 {% filter indent(width=2) %}
+take_snapshot: {{ snow_snapshot }}
 installed:
 {% for package in package_results.results -%}
 {% if (package | regex_search('^Installed:\ ')) %}

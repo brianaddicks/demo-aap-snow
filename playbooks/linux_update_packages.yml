@@ -4,40 +4,24 @@
   gather_facts: false
 
   tasks:
-    - name: Update select packages
+    - name: Set package state
       when: snow_implementation_plan is defined
-      block:
-        - name: Test output
-          debug:
-            msg:
-              - "{{ snow_implementation_plan[inventory_hostname].installed }}"
-              # - "{{ snow_implementation_plan | community.general.json_query(json_query)  }}"
-          vars:
-            json_query: "{{ inventory_hostname }}[*].Installed"
+      ansible.builtin.set_fact:
+        package_state: present
 
-        - name: Update requested packages
-          ansible.builtin.package:
-            name: "{{ snow_implementation_plan[inventory_hostname].installed }}"
-            state: present
-          become: true
-          register: package_results
+    - name: Update requested packages
+      ansible.builtin.package:
+        name: "{{ snow_implementation_plan[inventory_hostname].installed | default('*') }}"
+        state: "{{ package_state | default(latest) }}"
+      become: true
+      register: package_results
 
-    - name: Test block
-      when: snow_implementation_plan is not defined
-      block:
-        - name: Update all installed packages
-          ansible.builtin.package:
-            name: '*'
-            state: latest
-          become: true
-          register: package_results
-
-        - name: Set stats for subsequent Job Templates
-          ansible.builtin.set_stats:
-            data:
-              package_results_count: "{{ package_results.results | length }}"
-              snow_request_state: closed_complete
-              snow_ticket_number: "{{ snow_ticket_number | default('111111') }}"
-              snow_hostname: "{{ snow_hostname | default('eda-web1') }}"
-              snow_snapshot: "{{ snow_snapshot | default(false) }}"
-              snow_implementation_plan: "{{ lookup('template', '../templates/implementation_plan.j2') }}"
+    - name: Set stats for subsequent Job Templates
+      ansible.builtin.set_stats:
+        data:
+          # package_results_count: "{{ package_results.results | length }}"
+          # snow_request_state: closed_complete
+          # snow_ticket_number: "{{ snow_ticket_number | default('111111') }}"
+          # snow_hostname: "{{ snow_hostname | default('eda-web1') }}"
+          # snow_snapshot: "{{ snow_snapshot | default(false) }}"
+          snow_implementation_plan: "{{ lookup('template', '../templates/implementation_plan.j2') }}"
