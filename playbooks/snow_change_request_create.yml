@@ -42,6 +42,7 @@
               end_date: "{{ utc_planned_end_datetime }}"
               u_ritm: "{{ snow_ritm }}"
               implementation_plan: "{{ snow_implementation_plan }}"
+              cmdb_ci: "{{ snow_configuration_item }}"
           register: snow_cr_request
           until: snow_cr_request.changed is defined
           retries: 5
