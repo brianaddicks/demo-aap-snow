@@ -181,6 +181,7 @@ controller_templates:
     project: '{{ this_demo_project }}'
     playbook: 'playbooks/snow_change_request_info.yml'
     execution_environment: '{{ snow_ee }}'
+    use_fact_cache: true
     credentials:
       - '{{ snow_cred }}'
   - name: 'vCenter - Snapshot VM'
