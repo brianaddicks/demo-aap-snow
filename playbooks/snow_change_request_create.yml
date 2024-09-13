@@ -56,14 +56,14 @@
           delegate_to: localhost
 
         - name: Create a change task
-          loop: "{{ snow_configuration_sysid }}"
+          loop: "{{ snow_configuration_item | split(', ') }}"
           servicenow.itsm.change_request_task:
-            configuration_item_id: "{{ item }}"
+            configuration_item_id: "{{ hostvars[item].sys_id }}"
             change_request_number: "{{ snow_cr_request.record.number }}"
             type: implementation
             state: open
-            short_description: "Patch {{ snow_configuration_sysid }}"
-            description: "Patch {{ snow_configuration_sysid }}"
+            short_description: "Patch {{ item }}"
+            description: "Patch {{ item }}"
             planned_start_date: "{{ utc_planned_datetime }}"
             planned_end_date: "{{ utc_planned_end_datetime }}"
             other:
