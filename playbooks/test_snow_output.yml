@@ -22,3 +22,9 @@
     - debug:
         var: utc_planned_datetime
 
+    - set_fact:
+        ci_map: "{{ ci_map | default([]) + [dict(name=item[0], sysid=item[1])] }}"
+      loop: "{{ snow_configuration_item | zip(snow_configuration_sysid) | list }}"
+
+    - debug:
+        var: ci_map
