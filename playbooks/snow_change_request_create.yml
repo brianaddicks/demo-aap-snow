@@ -4,6 +4,13 @@
   gather_facts: false
 
   tasks:
+    # - name: split CI sysid from SNOW
+    #   ansible.builtin.set_fact:
+    #     snow_configuration_sysid: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
+
+    # - name: Set SNOW CI sysid for ansible hosts
+
+
     - name: Block to create CR
       block:
         - name: Get planned date info from SNOW
@@ -49,7 +56,7 @@
           delegate_to: localhost
 
         - name: Create a change task
-          loop: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
+          loop: "{{ snow_configuration_sysid }}"
           servicenow.itsm.change_request_task:
             configuration_item_id: "{{ item }}"
             change_request_number: "{{ snow_cr_request.record.number }}"
