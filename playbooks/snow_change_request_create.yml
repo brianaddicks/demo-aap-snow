@@ -63,7 +63,7 @@
             type: implementation
             state: open
             short_description: "Patch {{ item }}"
-            description: "Patch {{ (snow_implementation_plan | ansible.builtin.from_yaml)[item] }}"
+            description: "{{ (snow_implementation_plan | ansible.builtin.from_yaml)[item] | ansible.builtin.to_nice_yaml }}"
             planned_start_date: "{{ utc_planned_datetime }}"
             planned_end_date: "{{ utc_planned_end_datetime }}"
             other:
