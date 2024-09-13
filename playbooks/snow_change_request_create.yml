@@ -36,7 +36,7 @@
             risk: moderate
             impact: low
             assignment_group: "{{ snow_cr_assignment_group }}"
-            state: new
+            state: assess
             other:
               start_date: "{{ utc_planned_datetime }}"
               end_date: "{{ utc_planned_end_datetime }}"
@@ -48,24 +48,39 @@
           delay: 5
           delegate_to: localhost
 
-        - name: Add CIs to Change Request
+        - name: Create a change task
           loop: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
-          servicenow.itsm.change_request:
-            number: "{{ snow_cr_request.record.number }}"
+          servicenow.itsm.change_request_task:
+            configuration_item_id: "{{ item }}"
+            change_request_number: "{{ snow_cr_request.record.number }}"
+            type: implementation
+            state: open
+            short_description: "Patch {{ snow_configuration_sysid }}"
+            description: "Patch {{ snow_configuration_sysid }}"
+            planned_start_date: "{{ utc_planned_datetime }}"
+            planned_end_date: "{{ utc_planned_end_datetime }}"
             other:
-              cmdb_ci: "{{ item }}"
-          register: snow_cr_ci
-          until: snow_cr_ci.changed is defined
-          retries: 5
-          delay: 5
-          delegate_to: localhost
+              approval: approved
 
-        - name: Update CR state
-          servicenow.itsm.change_request:
-            number: "{{ snow_cr_request.record.number }}"
-            state: assess
-          register: snow_cr_request
-          until: snow_cr_request.changed is defined
-          retries: 5
-          delay: 5
-          delegate_to: localhost
+
+        # - name: Add CIs to Change Request
+        #   loop: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
+        #   servicenow.itsm.change_request:
+        #     number: "{{ snow_cr_request.record.number }}"
+        #     other:
+        #       cmdb_ci: "{{ item }}"
+        #   register: snow_cr_ci
+        #   until: snow_cr_ci.changed is defined
+        #   retries: 5
+        #   delay: 5
+        #   delegate_to: localhost
+
+        # - name: Update CR state
+        #   servicenow.itsm.change_request:
+        #     number: "{{ snow_cr_request.record.number }}"
+        #     state: assess
+        #   register: snow_cr_request
+        #   until: snow_cr_request.changed is defined
+        #   retries: 5
+        #   delay: 5
+        #   delegate_to: localhost
