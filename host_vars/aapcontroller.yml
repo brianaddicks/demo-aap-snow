@@ -124,9 +124,9 @@ controller_inventory_sources:
     update_on_launch: false
     update_cache_timeout: 0
     source_project: '{{ this_demo_project }}'
-  - name: '{{ inventory_from_snow }} API'
+  - name: 'Dynamic SNOW Inventory'
     source: scm
-    inventory: '{{ inventory_from_snow }}'
+    inventory: '{{ this_demo_inventory }}'
     source_path: inventories/now.yml
     overwrite: true
     update_on_launch: false

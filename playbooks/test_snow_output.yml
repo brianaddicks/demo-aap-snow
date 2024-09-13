@@ -27,4 +27,5 @@
       loop: "{{ snow_configuration_item | split(',') | zip(snow_configuration_sysid | split(',')) | list }}"
 
     - debug:
-        var: ci_map
+      loop: "{{ snow_configuration_item | split(',') }}"
+        msg: "{{ hostvars[item].sys_id }}"
