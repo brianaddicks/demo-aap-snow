@@ -15,10 +15,12 @@
       servicenow.itsm.change_request_task_info:
         query:
           - change_request: "= {{ snow_cr_request_info.records[0].sys_id }}"
+        sysparm_display_value: true
       register: snow_cr_task_info
 
-
-        # - name: Set stats for subsequent Job Templates
-        #   ansible.builtin.set_stats:
-        #     data:
-        #       snow_implementation_plan: "{{ snow_cr_request_info.records[0].implementation_plan | ansible.builtin.from_yaml }}"
+    - name: Set facts for each hosts
+      ansible.builtin.set_fact:
+        implementation_plan: "{{ item.description | ansible.builtin.from_yaml }}"
+      delegate_to: "{{ item.cmdb_ci }}"
+      delegate_facts: true
+      loop: "{{ snow_cr_task_info.records }}"
