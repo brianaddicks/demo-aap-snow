@@ -1,5 +1,5 @@
-{% filter indent(width=4) %}
-- {{ inventory_hostname }}:
+{% filter indent(width=2) %}
+{{ inventory_hostname }}:
 {% for package in package_results.results -%}
 - {{ package }}
 {% endfor %}
