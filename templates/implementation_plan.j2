@@ -1,6 +1,19 @@
 {% filter indent(width=2) %}
 {{ inventory_hostname }}:
+{% filter indent(width=2) %}
+installed:
 {% for package in package_results.results -%}
-- {{ package }}
+{% if (package | regex_search('^Installed:\ ')) %}
+- {{ package | replace("Installed: ","") }}
+{% endif %}
 {% endfor %}
+{% endfilter %}
+{% filter indent(width=2) %}
+removed:
+{% for package in package_results.results -%}
+{% if (package | regex_search('^Removed:\ ')) %}
+- {{ package | replace("Removed: ","") }}
+{% endif %}
+{% endfor %}
+{% endfilter %}
 {% endfilter %}
