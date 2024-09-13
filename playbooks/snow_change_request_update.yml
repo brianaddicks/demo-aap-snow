@@ -1,12 +1,21 @@
 ---
 - name: Update Catalog Request
-  hosts: snow
+  hosts: "{{ snow_configuration_item | default('snow') }}"
   gather_facts: false
 
   tasks:
-  - name: Update to implement the change request in ServiceNow
-    servicenow.itsm.change_request:
-      state: "{{ change_request_number_state }}"
-      number: "{{ snow_cr_number }}"
-      assignment_group: "{{ snow_cr_assignment_group }}"
-    delegate_to: localhost
+  # - name: Update to implement the change request in ServiceNow
+  #   servicenow.itsm.change_request:
+  #     state: "{{ change_request_number_state }}"
+  #     number: "{{ snow_cr_number }}"
+  #     assignment_group: "{{ snow_cr_assignment_group }}"
+  #   delegate_to: localhost
+
+  - name: Update SNOW Change Task
+    when: ctask is defined
+    servicenow.itsm.change_request_task:
+      state: "{{ ctask_state | default(omit) }}"
+      number: "{{ ctask }}"
+      other:
+        work_notes: "{{ ctask_work_notes | default(omit) }}"
+    delegate_to: snow
