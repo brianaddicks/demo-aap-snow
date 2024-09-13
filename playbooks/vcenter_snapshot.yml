@@ -11,7 +11,8 @@
   tasks:
     - name: Create snapshot
       ansible.builtin.debug:
-        msg: "{{ implementation_plan }}"
+        msg: "take snapshot"
+      when: implementation_plan.take_snapshot
 
     # - name: Create a snapshot
     #   when: snow_snapshot is defined and
