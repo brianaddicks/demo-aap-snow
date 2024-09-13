@@ -4,67 +4,58 @@
   gather_facts: false
 
   tasks:
-    # - name: split CI sysid from SNOW
-    #   ansible.builtin.set_fact:
-    #     snow_configuration_sysid: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
+    - name: Get planned date info from SNOW
+      ansible.builtin.set_fact:
+        utc_year: "{{ (snow_planned_datetime | to_datetime).year }}"
+        utc_month: '{{ "%02d" | format((snow_planned_datetime | to_datetime).month) }}'
+        utc_day: '{{ "%02d" | format((snow_planned_datetime | to_datetime).day) }}'
+        utc_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
+        utc_end_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +5) }}'
+        utc_minute: '{{ "%02d" | format((snow_planned_datetime | to_datetime).minute | int) }}'
 
-    # - name: Set SNOW CI sysid for ansible hosts
+    - name: Convert planned start/end date to UTC
+      ansible.builtin.set_fact:
+        utc_planned_datetime: >-
+          {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
+          {{ utc_hour }}:{{ utc_minute }}:00
+        utc_planned_end_datetime: >-
+          {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
+          {{ utc_end_hour }}:{{ utc_minute }}:00
 
+    - name: Create ServiceNow Change Request
+      servicenow.itsm.change_request:
+        type: normal
+        short_description: "{{ snow_cr_short_description }}"
+        description: >
+          Patch the following systems:
 
-    - name: Block to create CR
-      block:
-        - name: Get planned date info from SNOW
-          ansible.builtin.set_fact:
-            utc_year: "{{ (snow_planned_datetime | to_datetime).year }}"
-            utc_month: '{{ "%02d" | format((snow_planned_datetime | to_datetime).month) }}'
-            utc_day: '{{ "%02d" | format((snow_planned_datetime | to_datetime).day) }}'
-            utc_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +4) }}'
-            utc_end_hour: '{{ "%02d" | format((snow_planned_datetime | to_datetime).hour | int +5) }}'
-            utc_minute: '{{ "%02d" | format((snow_planned_datetime | to_datetime).minute | int) }}'
+          {{ (snow_configuration_item | split(', ') | to_nice_yaml) | default(snow_cr_description) }}
+        priority: high
+        risk: moderate
+        impact: low
+        assignment_group: "{{ snow_cr_assignment_group }}"
+        state: assess
+        other:
+          start_date: "{{ utc_planned_datetime }}"
+          end_date: "{{ utc_planned_end_datetime }}"
+          u_ritm: "{{ snow_ritm }}"
+          implementation_plan: "Details available in Change Tasks."
+      register: snow_cr_request
+      until: snow_cr_request.changed is defined
+      retries: 5
+      delay: 5
+      delegate_to: localhost
 
-        - name: Convert planned start/end date to UTC
-          ansible.builtin.set_fact:
-            utc_planned_datetime: >-
-              {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
-              {{ utc_hour }}:{{ utc_minute }}:00
-            utc_planned_end_datetime: >-
-              {{ utc_year }}-{{ utc_month }}-{{ utc_day }}
-              {{ utc_end_hour }}:{{ utc_minute }}:00
-
-        - name: Create ServiceNow Change Request
-          servicenow.itsm.change_request:
-            type: normal
-            short_description: "{{ snow_cr_short_description }}"
-            description: >
-              Patch the following systems:
-
-              {{ (snow_configuration_item | split(', ') | to_nice_yaml) | default(snow_cr_description) }}
-            priority: high
-            risk: moderate
-            impact: low
-            assignment_group: "{{ snow_cr_assignment_group }}"
-            state: assess
-            other:
-              start_date: "{{ utc_planned_datetime }}"
-              end_date: "{{ utc_planned_end_datetime }}"
-              u_ritm: "{{ snow_ritm }}"
-              implementation_plan: "Details available in Change Tasks."
-          register: snow_cr_request
-          until: snow_cr_request.changed is defined
-          retries: 5
-          delay: 5
-          delegate_to: localhost
-
-        - name: Create a change task
-          loop: "{{ snow_configuration_item | split(', ') }}"
-          servicenow.itsm.change_request_task:
-            configuration_item_id: "{{ hostvars[item].sys_id }}"
-            change_request_number: "{{ snow_cr_request.record.number }}"
-            type: implementation
-            state: open
-            short_description: "Patch {{ item }}"
-            description: "{{ (snow_implementation_plan | ansible.builtin.from_yaml)[item] | ansible.builtin.to_nice_yaml }}"
-            planned_start_date: "{{ utc_planned_datetime }}"
-            planned_end_date: "{{ utc_planned_end_datetime }}"
-            other:
-              approval: approved
+    - name: Create a change task
+      loop: "{{ snow_configuration_item | split(', ') }}"
+      servicenow.itsm.change_request_task:
+        configuration_item_id: "{{ hostvars[item].sys_id }}"
+        change_request_number: "{{ snow_cr_request.record.number }}"
+        type: implementation
+        state: open
+        short_description: "Patch {{ item }}"
+        description: "{{ (snow_implementation_plan | ansible.builtin.from_yaml)[item] | ansible.builtin.to_nice_yaml }}"
+        planned_start_date: "{{ utc_planned_datetime }}"
+        planned_end_date: "{{ utc_planned_end_datetime }}"
+        other:
+          approval: approved

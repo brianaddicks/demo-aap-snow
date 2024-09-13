@@ -24,3 +24,9 @@
       delegate_to: "{{ item.cmdb_ci }}"
       delegate_facts: true
       loop: "{{ snow_cr_task_info.records }}"
+
+    - name: Set stats for subsequent playbooks
+      ansible.builtin.set_stats:
+        data:
+          snow_configuration_item: "{{ snow_cr_task_info.records | map(attribute='cmdb_ci') }}"
+
