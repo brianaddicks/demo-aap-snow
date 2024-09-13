@@ -9,7 +9,11 @@
       block:
         - name: Test output
           debug:
-            msg: "{{ snow_implementation_plan[inventory_hostname].Installed }}"
+            msg:
+              - "{{ snow_implementation_plan[inventory_hostname] }}"
+              - "{{ snow_implementation_plan | community.general.json_query(json_query)  }}"
+          vars:
+            json_query: "{{ inventory_hostname }}[*].Installed"
 
     - name: Test block
       when: snow_implementation_plan is not defined
