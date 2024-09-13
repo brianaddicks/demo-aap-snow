@@ -165,6 +165,7 @@ controller_templates:
     project: '{{ this_demo_project }}'
     playbook: 'playbooks/snow_change_request_update.yml'
     execution_environment: '{{ snow_ee }}'
+    use_fact_cache: true
     credentials:
       - '{{ snow_cred }}'
   - name: 'SNOW - Test Output'
@@ -199,6 +200,7 @@ controller_templates:
     project: '{{ this_demo_project }}'
     playbook: 'playbooks/aap_create_schedule.yml'
     execution_environment: '{{ aap_ee }}'
+    use_fact_cache: true
     credentials:
       - '{{ aap_cred }}'
 
