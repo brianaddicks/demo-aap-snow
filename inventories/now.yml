@@ -19,4 +19,4 @@ keyed_groups:
   - key: classification
     separator: ''
 query:
-  - assigned_to: = 'Brian Addicks'
+  - assigned_to: '= Brian Addicks'
