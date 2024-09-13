@@ -19,4 +19,4 @@ keyed_groups:
   - key: classification
     separator: ''
 query:
-  - class: = Linux Server
+  - assigned_to: = Brian Addicks
