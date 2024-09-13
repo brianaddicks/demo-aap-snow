@@ -4,14 +4,17 @@
   gather_facts: false
 
   tasks:
-    - name: Block to create CR
-      block:
+    - name: Retrieve SNOW Change Request info
+      servicenow.itsm.change_request_info:
+        number: "{{ snow_cr_number }}"
+      register: snow_cr_request_info
 
-        - name: Retrieve SNOW Change Request info
-          servicenow.itsm.change_request_info:
-            number: "{{ snow_cr_number }}"
-          register: snow_cr_request_info
-          # delegate_to: localhost
+    - name: Retrieve SNOW Change Task info
+      servicenow.itsm.change_request_info:
+        query:
+          - change_request: "= {{ snow_cr_request_info.records[0].sys_id }}"
+      register: snow_cr_task_info
+
 
         # - name: Set stats for subsequent Job Templates
         #   ansible.builtin.set_stats:
