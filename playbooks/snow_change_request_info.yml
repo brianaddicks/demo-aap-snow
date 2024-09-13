@@ -11,9 +11,9 @@
           servicenow.itsm.change_request_info:
             number: "{{ snow_cr_number }}"
           register: snow_cr_request_info
-          delegate_to: localhost
+          # delegate_to: localhost
 
-        - name: Set stats for subsequent Job Templates
-          ansible.builtin.set_stats:
-            data:
-              snow_implementation_plan: "{{ snow_cr_request_info.records[0].implementation_plan | ansible.builtin.from_yaml }}"
+        # - name: Set stats for subsequent Job Templates
+        #   ansible.builtin.set_stats:
+        #     data:
+        #       snow_implementation_plan: "{{ snow_cr_request_info.records[0].implementation_plan | ansible.builtin.from_yaml }}"

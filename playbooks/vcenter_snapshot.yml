@@ -1,6 +1,6 @@
 ---
 - name: Update all packages
-  hosts: vcenter
+  hosts: "{{ snow_configuration_item | default('vcenter') }}"
   gather_facts: false
   vars:
     - vcenter_creds: &vcenter_conn

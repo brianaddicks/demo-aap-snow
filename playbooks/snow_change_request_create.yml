@@ -68,13 +68,3 @@
             planned_end_date: "{{ utc_planned_end_datetime }}"
             other:
               approval: approved
-
-        # - name: Update CR state
-        #   servicenow.itsm.change_request:
-        #     number: "{{ snow_cr_request.record.number }}"
-        #     state: assess
-        #   register: snow_cr_request
-        #   until: snow_cr_request.changed is defined
-        #   retries: 5
-        #   delay: 5
-        #   delegate_to: localhost
