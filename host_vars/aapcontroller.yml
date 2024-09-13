@@ -26,6 +26,8 @@ snow_ee: ServiceNow EE
 this_demo_inventory: SNOW Demo Inventory
 this_demo_project: SNOW Demo Project
 
+inventory_from_snow: Inventory from SNOW
+
 controller_credentials:
   - name: '{{ aap_cred }}'
     description: '{{ aap_cred }}'
@@ -109,12 +111,23 @@ controller_inventories:
   - name: '{{ this_demo_inventory }}'
     description: '{{ this_demo_inventory }}'
     organization: Default
+  - name: '{{ inventory_from_snow }}'
+    description: Inventory pulled from SNOW CMDB
+    organization: Default
 
 controller_inventory_sources:
   - name: '{{ this_demo_inventory }} Repo'
     source: scm
     inventory: '{{ this_demo_inventory }}'
     source_path: inventory.yml
+    overwrite: true
+    update_on_launch: false
+    update_cache_timeout: 0
+    source_project: '{{ this_demo_project }}'
+  - name: '{{ inventory_from_snow }} API'
+    source: scm
+    inventory: '{{ inventory_from_snow }}'
+    source_path: inventories/now.yml
     overwrite: true
     update_on_launch: false
     update_cache_timeout: 0
