@@ -19,4 +19,4 @@ keyed_groups:
   - key: classification
     separator: ''
 query:
-  - assigned_to: '= Brian Addicks'
+  - assigned_to: = cb3103e147f5f150baa98528436d433e
