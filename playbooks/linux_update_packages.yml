@@ -15,6 +15,13 @@
           vars:
             json_query: "{{ inventory_hostname }}[*].Installed"
 
+        - name: Update requested packages
+          ansible.builtin.package:
+            name: "{{ snow_implementation_plan[inventory_hostname].installed }}"
+            state: present
+          become: true
+          register: package_results
+
     - name: Test block
       when: snow_implementation_plan is not defined
       block:
