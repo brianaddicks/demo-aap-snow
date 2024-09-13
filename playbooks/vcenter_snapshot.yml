@@ -9,10 +9,20 @@
         password: "{{ lookup('ansible.builtin.env', 'VMWARE_PASSWORD') }}"
 
   tasks:
-    - name: Create snapshot
-      ansible.builtin.debug:
-        msg: "take snapshot"
+    - name: Tasks when snapshot requested
       when: implementation_plan.take_snapshot
+      block:
+        - name: Create snapshot
+          ansible.builtin.debug:
+            msg: "take snapshot"
+
+        - name: Update to implement the change request in ServiceNow
+          servicenow.itsm.change_request_task:
+            state: in_progress'
+            number: "{{ ctask }}"
+            other:
+              work_notes: "Starting VMWare snapshot"
+          delegate_to: snow
 
     # - name: Create a snapshot
     #   when: snow_snapshot is defined and

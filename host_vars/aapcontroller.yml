@@ -190,6 +190,7 @@ controller_templates:
     project: '{{ this_demo_project }}'
     playbook: 'playbooks/vcenter_snapshot.yml'
     execution_environment: '{{ vcenter_ee }}'
+    use_fact_cache: true
     credentials:
       - '{{ vcenter_cred }}'
   - name: 'AAP - Create Schedule'

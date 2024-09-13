@@ -21,6 +21,7 @@
     - name: Set facts for each hosts
       ansible.builtin.set_fact:
         implementation_plan: "{{ item.description | ansible.builtin.from_yaml }}"
+        ctask: "{{ item.number }}"
         cacheable: true
       delegate_to: "{{ item.cmdb_ci }}"
       delegate_facts: true
