@@ -12,7 +12,7 @@
     - name: Update requested packages
       ansible.builtin.package:
         name: "{{ snow_implementation_plan[inventory_hostname].installed | default('*') }}"
-        state: "{{ package_state | default(latest) }}"
+        state: "{{ package_state | default('latest') }}"
       become: true
       register: package_results
 
