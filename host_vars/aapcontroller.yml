@@ -131,6 +131,7 @@ controller_inventory_sources:
     overwrite: true
     update_on_launch: false
     update_cache_timeout: 0
+    credential: '{{ snow_cred }}'
     source_project: '{{ this_demo_project }}'
 
 controller_templates:

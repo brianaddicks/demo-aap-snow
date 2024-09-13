@@ -18,5 +18,5 @@ ansible-navigator run ../playbooks/aap_configure.yml \
   --penv SN_USERNAME \
   --penv SN_PASSWORD \
   --penv RHC_ORGANIZATION \
-  -i ../inventory.yml \
-  -m stdout
+  -i ../inventory.yml #\
+ # -m stdout

@@ -11,7 +11,7 @@
         name: "redhat_cop.controller_configuration.{{ item }}"
       loop:
         - project_update
-        - inventory_source_update
+        # - inventory_source_update
 
     - name: Setup Components
       ansible.builtin.include_role:
