@@ -54,17 +54,16 @@
             number: "{{ snow_cr_request.record.number }}"
             other:
               cmdb_ci: "{{ item }}"
-          register: snow_cr_request
-          until: snow_cr_request.changed is defined
+          register: snow_cr_ci
+          until: snow_cr_ci.changed is defined
           retries: 5
           delay: 5
           delegate_to: localhost
 
         - name: Update CR state
-          loop: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
           servicenow.itsm.change_request:
             number: "{{ snow_cr_request.record.number }}"
-            state: asses
+            state: assess
           register: snow_cr_request
           until: snow_cr_request.changed is defined
           retries: 5
