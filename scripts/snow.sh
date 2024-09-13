@@ -1,4 +1,4 @@
-ansible-navigator run ../playbooks/snow_change_request_wait.yml \
+ansible-navigator run ../playbooks/snow_change_request_info.yml \
   --eei quay.io/rh_ee_baddicks/snow-ee \
   --penv CONTROLLER_HOST \
   --penv CONTROLLER_USERNAME \
