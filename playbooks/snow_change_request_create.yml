@@ -50,7 +50,7 @@
           delegate_to: localhost
 
         - name: Add CIs to Change Request
-          loop: "{{ snow_configuration_sysid }}"
+          loop: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
           servicenow.itsm.change_request:
             number: "{{ snow_cr_request.record.number }}"
             other:
