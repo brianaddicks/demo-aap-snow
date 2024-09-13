@@ -63,7 +63,7 @@
             type: implementation
             state: open
             short_description: "Patch {{ item }}"
-            description: "Patch {{ item }}"
+            description: "Patch {{ snow_implementation_plan[item] }}"
             planned_start_date: "{{ utc_planned_datetime }}"
             planned_end_date: "{{ utc_planned_end_datetime }}"
             other:
