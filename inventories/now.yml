@@ -9,6 +9,7 @@ columns:
   - os
   - classification
   - sys_id
+  - assigned_to
 compose:
   ip_addr: ip_address
   ansible_host: host_name
