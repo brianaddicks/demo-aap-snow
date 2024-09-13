@@ -1,5 +1,5 @@
 ---
-- name: Update all packages
+- name: Take snapshot if required
   hosts: "{{ snow_configuration_item | default('vcenter') }}"
   gather_facts: false
   vars:
@@ -11,7 +11,7 @@
   tasks:
     - name: Create snapshot
       ansible.builtin.debug:
-        var: implementation_plan.take_snapshot
+        var: host_vars
 
     # - name: Create a snapshot
     #   when: snow_snapshot is defined and
