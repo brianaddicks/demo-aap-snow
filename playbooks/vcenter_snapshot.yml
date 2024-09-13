@@ -21,5 +21,5 @@
             state: present
             snapshot_name: "{{ snow_cr_number }}{{ ctask }}"
             description: pre-patching
-          delegate_to: vcenter
+          delegate_to: localhost
           register: vcenter_snapshot_info
