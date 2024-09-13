@@ -8,6 +8,7 @@ all:
       hosts:
         aapcontroller:
         vcenter:
+          ansible_python_interpreter: /usr/bin/python3
         snow:
           snow_cr_short_description: BA AAP CR
           snow_cr_description: Sample change description
