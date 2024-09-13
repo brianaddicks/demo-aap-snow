@@ -30,4 +30,4 @@
         msg:
           - "{{ item }}"
           -  "{{ hostvars[item].sys_id }}"
-      loop: "{{ snow_configuration_item | split(',') }}"
+      loop: "{{ snow_configuration_item | split(', ') }}"
