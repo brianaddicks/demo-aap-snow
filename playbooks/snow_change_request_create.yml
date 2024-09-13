@@ -48,7 +48,7 @@
               start_date: "{{ utc_planned_datetime }}"
               end_date: "{{ utc_planned_end_datetime }}"
               u_ritm: "{{ snow_ritm }}"
-              implementation_plan: "{{ snow_implementation_plan }}"
+              implementation_plan: "Details available in Change Tasks."
           register: snow_cr_request
           until: snow_cr_request.changed is defined
           retries: 5
@@ -69,25 +69,12 @@
             other:
               approval: approved
 
-
-        # - name: Add CIs to Change Request
-        #   loop: "{{ snow_configuration_sysid | ansible.builtin.split(',') }}"
-        #   servicenow.itsm.change_request:
-        #     number: "{{ snow_cr_request.record.number }}"
-        #     other:
-        #       cmdb_ci: "{{ item }}"
-        #   register: snow_cr_ci
-        #   until: snow_cr_ci.changed is defined
-        #   retries: 5
-        #   delay: 5
-        #   delegate_to: localhost
-
-        # - name: Update CR state
-        #   servicenow.itsm.change_request:
-        #     number: "{{ snow_cr_request.record.number }}"
-        #     state: assess
-        #   register: snow_cr_request
-        #   until: snow_cr_request.changed is defined
-        #   retries: 5
-        #   delay: 5
-        #   delegate_to: localhost
+        - name: Update CR state
+          servicenow.itsm.change_request:
+            number: "{{ snow_cr_request.record.number }}"
+            state: assess
+          register: snow_cr_request
+          until: snow_cr_request.changed is defined
+          retries: 5
+          delay: 5
+          delegate_to: localhost
