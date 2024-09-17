@@ -30,7 +30,7 @@
             ctask_work_notes: |
               Patching results:
 
-              {{ package_results.results }}
+              {{ (package_results.results | default("[no packages to update]")) | to_nice_yaml }}
             ctask_update: true
             cacheable: true
 
