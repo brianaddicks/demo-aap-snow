@@ -5,18 +5,19 @@
 
   tasks:
     - name: Set package state
-      when: snow_implementation_plan is defined
+      when: implementation_plan is defined
       ansible.builtin.set_fact:
         package_state: present
 
     - name: Update requested packages
       ansible.builtin.package:
-        name: "{{ snow_implementation_plan[inventory_hostname].installed | default('*') }}"
+        name: "{{ implementation_plan.installed | default('*') }}"
         state: "{{ package_state | default('latest') }}"
       become: true
       register: package_results
 
     - name: Set stats for subsequent Job Templates
+      when: implementation_plan is not defined
       ansible.builtin.set_stats:
         data:
           # package_results_count: "{{ package_results.results | length }}"
