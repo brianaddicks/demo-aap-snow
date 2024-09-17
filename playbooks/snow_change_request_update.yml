@@ -27,4 +27,8 @@
   - name: Clear updates
     ansible.builtin.set_fact:
       ctask_update: false
+      ctask_state: null
+      ctask_work_notes: null
+      ctask_close_notes: null
+      ctask_close_code: null
       cacheable: true
