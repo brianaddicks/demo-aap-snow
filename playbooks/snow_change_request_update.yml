@@ -11,18 +11,6 @@
   #     assignment_group: "{{ snow_cr_assignment_group }}"
   #   delegate_to: localhost
 
-  - name: Update SNOW Change Request
-    when:
-      - crequest_update is defined
-      - crequest_update
-    servicenow.itsm.change_request:
-      state: "{{ crequest_state | default(omit, true) }}"
-      close_notes: "{{ crequest_close_notes | default(omit, true) }}"
-      close_code: "{{ crequest_close_code | default(omit, true) }}"
-      number: "{{ snow_cr_number }}"
-    delegate_to: snow
-    run_once: true
-
   - name: Update SNOW Change Task
     when:
       - ctask_update is defined
@@ -35,6 +23,18 @@
       other:
         work_notes: "{{ ctask_work_notes | default(omit, true) }}"
     delegate_to: snow
+
+  - name: Update SNOW Change Request
+    when:
+      - crequest_update is defined
+      - crequest_update
+    servicenow.itsm.change_request:
+      state: "{{ crequest_state | default(omit, true) }}"
+      close_notes: "{{ crequest_close_notes | default(omit, true) }}"
+      close_code: "{{ crequest_close_code | default(omit, true) }}"
+      number: "{{ snow_cr_number }}"
+    delegate_to: snow
+    run_once: true
 
   - name: Clear updates
     ansible.builtin.set_fact:
