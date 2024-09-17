@@ -5,7 +5,9 @@
 
   tasks:
     - name: Implmentation Plan defined
-      when: implementation_plan is defined
+      when:
+        - implementation_plan is defined
+        - implementation_plan | length > 0
       block:
         - name: Set package state
           ansible.builtin.set_fact:
@@ -42,6 +44,7 @@
             crequest_state: review
             # crequest_close_notes: "Patching complete."
             # crequest_close_code: successful
+            implementation_plan: ''
             cacheable: true
 
     - name: Implmentation Plan is not defined
