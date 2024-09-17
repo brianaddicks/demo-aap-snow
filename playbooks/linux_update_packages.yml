@@ -4,25 +4,40 @@
   gather_facts: false
 
   tasks:
-    - name: Set package state
+    - name: Implmentation Plan defined
       when: implementation_plan is defined
-      ansible.builtin.set_fact:
-        package_state: present
+      block:
+        - name: Set package state
+          ansible.builtin.set_fact:
+            package_state: present
 
-    - name: Update requested packages
-      ansible.builtin.package:
-        name: "{{ implementation_plan.installed | default('*') }}"
-        state: "{{ package_state | default('latest') }}"
-      become: true
-      register: package_results
+        - name: Update requested packages
+          ansible.builtin.package:
+            name: "{{ implementation_plan.installed | default('*') }}"
+            state: "{{ package_state | default('latest') }}"
+          become: true
+          register: package_results
 
-    - name: Set stats for subsequent Job Templates
+        - name: Set facts for next SNOW update
+          ansible.builtin.set_fact:
+            ctask_work_notes: |
+              Patching results:
+
+              {{ package_results.results }}
+            ctask_update: true
+            cacheable: true
+
+    - name: Implmentation Plan is not defined
       when: implementation_plan is not defined
-      ansible.builtin.set_stats:
-        data:
-          # package_results_count: "{{ package_results.results | length }}"
-          # snow_request_state: closed_complete
-          # snow_ticket_number: "{{ snow_ticket_number | default('111111') }}"
-          # snow_hostname: "{{ snow_hostname | default('eda-web1') }}"
-          # snow_snapshot: "{{ snow_snapshot | default(false) }}"
-          snow_implementation_plan: "{{ lookup('template', '../templates/implementation_plan.j2') }}"
+      block:
+        - name: Get package information
+          ansible.builtin.package:
+            name: "*"
+            state: "latest"
+          become: true
+          register: package_results
+
+        - name: Set stats for subsequent Job Templates
+          ansible.builtin.set_stats:
+            data:
+              snow_implementation_plan: "{{ lookup('template', '../templates/implementation_plan.j2') }}"
