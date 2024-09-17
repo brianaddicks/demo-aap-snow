@@ -17,18 +17,13 @@
       - ctask_update
     servicenow.itsm.change_request_task:
       state: "{{ ctask_state | default(omit) }}"
+      close_notes: "{{ ctask_close_notes | default(omit) }}"
+      close_code: "{{ ctask_close_code | default(omit) }}"
       number: "{{ ctask }}"
       other:
         work_notes: "{{ ctask_work_notes | default(omit) }}"
-        close_notes: "{{ ctask_close_notes | default(omit) }}"
-        close_code: "{{ ctask_close_code | default(omit) }}"
     delegate_to: snow
 
   - name: Clear updates
-    ansible.builtin.set_fact:
-      ctask_update: false
-      ctask_state: null
-      ctask_work_notes: null
-      ctask_close_notes: null
-      ctask_close_code: null
-      cacheable: true
+    ansible.builtin.meta: clear_facts
+
