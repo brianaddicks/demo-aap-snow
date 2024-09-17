@@ -43,6 +43,8 @@
               {{ package_output }}
             ctask_update: true
             ctask_state: closed
+            ctask_close_notes: "Patching complete."
+            ctask_close_code: successful
             cacheable: true
 
     - name: Implmentation Plan is not defined

@@ -20,6 +20,8 @@
       number: "{{ ctask }}"
       other:
         work_notes: "{{ ctask_work_notes | default(omit) }}"
+        close_notes: "{{ ctask_close_notes | default(omit) }}"
+        close_code: "{{ ctask_close_code | default(omit) }}"
     delegate_to: snow
 
   - name: Clear updates
