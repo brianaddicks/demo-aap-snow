@@ -4,13 +4,6 @@
   gather_facts: false
 
   tasks:
-    - name: Get Facts
-      ansible.builtin.setup:
-
-    - name: Show plan
-      ansible.builtin.debug:
-        var: implementation_plan
-
     - name: Implmentation Plan defined
       when: implementation_plan is defined
       block:
