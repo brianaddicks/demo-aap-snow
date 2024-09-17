@@ -42,6 +42,7 @@
 
               {{ package_output }}
             ctask_update: true
+            ctask_state: closed
             cacheable: true
 
     - name: Implmentation Plan is not defined
