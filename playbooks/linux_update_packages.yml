@@ -48,7 +48,8 @@
             cacheable: true
 
     - name: Implmentation Plan is not defined
-      when: implementation_plan is not defined
+      when: implementation_plan is not defined or
+            implementation_plan | length == 0
       block:
         - name: Get package information
           ansible.builtin.package:
