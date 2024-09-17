@@ -39,9 +39,9 @@
             ctask_close_notes: "Patching complete."
             ctask_close_code: successful
             crequest_update: true
-            crequest_state: closed
-            crequest_close_notes: "Patching complete."
-            crequest_close_code: successful
+            crequest_state: review
+            # crequest_close_notes: "Patching complete."
+            # crequest_close_code: successful
             cacheable: true
 
     - name: Implmentation Plan is not defined
