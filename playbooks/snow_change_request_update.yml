@@ -12,10 +12,17 @@
   #   delegate_to: localhost
 
   - name: Update SNOW Change Task
-    when: ctask is defined
+    when:
+      - ctask_update is defined
+      - ctask_update
     servicenow.itsm.change_request_task:
       state: "{{ ctask_state | default(omit) }}"
       number: "{{ ctask }}"
       other:
         work_notes: "{{ ctask_work_notes | default(omit) }}"
     delegate_to: snow
+
+  - name: Clear updates
+    ansible.builtin.set_fact:
+      ctask_update: false
+      cacheable: true

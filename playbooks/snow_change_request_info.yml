@@ -24,6 +24,7 @@
         ctask: "{{ item.number }}"
         ctask_work_notes: "{{ (item.description | ansible.builtin.from_yaml).take_snapshot | ansible.builtin.ternary('Starting VMWare snapshot.','Skipping VMWare snapshot.') }}"
         ctask_state: in_progress
+        ctask_update: true
         cacheable: true
       delegate_to: "{{ item.cmdb_ci }}"
       delegate_facts: true

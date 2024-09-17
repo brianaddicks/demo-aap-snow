@@ -23,3 +23,10 @@
             description: pre-patching
           delegate_to: vcenter
           register: vcenter_snapshot_info
+
+    - name: Set facts for next SNOW update
+      ansible.builtin.set_fact:
+        ctask_work_notes: >
+          Beginning patching cycle.
+        ctask_update: true
+        cacheable: true
