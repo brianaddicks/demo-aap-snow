@@ -25,12 +25,22 @@
           become: true
           register: package_results
 
+        - name: Set package output when length > 0
+          when: package_results.results | length > 0
+          ansible.builtin.set_fact:
+            package_output: "{{ package_results.results | to_nice_yaml }}"
+
+        - name: Set package output when length = 0
+          when: package_results.results | length == 0
+          ansible.builtin.set_fact:
+            package_output: "No packages to update"
+
         - name: Set facts for next SNOW update
           ansible.builtin.set_fact:
             ctask_work_notes: |
               Patching results:
 
-              {{ (package_results.results | default("[no packages to update]")) | to_nice_yaml }}
+              {{ package_output }}
             ctask_update: true
             cacheable: true
 
