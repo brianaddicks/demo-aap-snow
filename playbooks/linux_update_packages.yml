@@ -4,6 +4,22 @@
   gather_facts: false
 
   tasks:
+    - name: Implmentation Plan is not defined
+      when: implementation_plan is not defined or
+            implementation_plan | length == 0
+      block:
+        - name: Get package information
+          ansible.builtin.package:
+            name: "*"
+            state: "latest"
+          become: true
+          register: package_results
+
+        - name: Set stats for subsequent Job Templates
+          ansible.builtin.set_stats:
+            data:
+              snow_implementation_plan: "{{ lookup('template', '../templates/implementation_plan.j2') }}"
+
     - name: Implmentation Plan defined
       when:
         - implementation_plan is defined
@@ -46,19 +62,3 @@
             # crequest_close_code: successful
             implementation_plan: ''
             cacheable: true
-
-    - name: Implmentation Plan is not defined
-      when: implementation_plan is not defined or
-            implementation_plan | length == 0
-      block:
-        - name: Get package information
-          ansible.builtin.package:
-            name: "*"
-            state: "latest"
-          become: true
-          register: package_results
-
-        - name: Set stats for subsequent Job Templates
-          ansible.builtin.set_stats:
-            data:
-              snow_implementation_plan: "{{ lookup('template', '../templates/implementation_plan.j2') }}"
