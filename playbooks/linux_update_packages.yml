@@ -33,7 +33,7 @@
         - name: Set package output when length = 0
           when: package_results.results | length == 0
           ansible.builtin.set_fact:
-            package_output: "No packages to update"
+            package_output: "No packages to update."
 
         - name: Set facts for next SNOW update
           ansible.builtin.set_fact:
