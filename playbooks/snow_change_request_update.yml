@@ -16,12 +16,12 @@
       - ctask_update is defined
       - ctask_update
     servicenow.itsm.change_request_task:
-      state: "{{ ctask_state | default(omit) }}"
-      close_notes: "{{ ctask_close_notes | default(omit) }}"
-      close_code: "{{ ctask_close_code | default(omit) }}"
+      state: "{{ ctask_state | default(omit, true) }}"
+      close_notes: "{{ ctask_close_notes | default(omit, true) }}"
+      close_code: "{{ ctask_close_code | default(omit, true) }}"
       number: "{{ ctask }}"
       other:
-        work_notes: "{{ ctask_work_notes | default(omit) }}"
+        work_notes: "{{ ctask_work_notes | default(omit, true) }}"
     delegate_to: snow
 
   - name: Clear updates
