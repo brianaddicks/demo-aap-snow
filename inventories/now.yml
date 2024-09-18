@@ -13,6 +13,7 @@ columns:
 compose:
   ip_addr: ip_address
   ansible_host: host_name
+  test_compose: host_name ip_address
 keyed_groups:
   - key: os
     separator: ''
